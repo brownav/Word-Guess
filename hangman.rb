@@ -1,20 +1,17 @@
 class Display
   attr_accessor :flowers, :secret_word, :guess_letter
 
-  def initialize
-    @flowers = %W[(@)(@)(@)(@)]
-    word = "desks"
-    @secret_word = word.split("")
-    @guess_letter = "m"
-
+  def initialize()
+    @flowers = ["(@)", "(@)", "(@)", "(@)"]
   end
 
   def print_flower
     puts "\n"
     @flowers.each do |flower|
-      print "#{flower}\n"
+      print "#{flower}"
     end
-    puts " \\,\\,|,/,/,"
+    puts
+    puts " \\,\\,|,/,/"
     puts "   _\\|/_   "
     puts "  |_____|  "
     puts "   |   |   "
@@ -24,7 +21,7 @@ class Display
   def remove_flower
     # remove flower from picture
     # flowers stored as elements in array?
-    @flowers = [@flowers.shift]
+    @flowers.delete_at(-1)
     print_flower
   end
 
@@ -36,37 +33,35 @@ class Display
       print "_"
     end
     puts "\n"
-    if !@secret_word.include?(@guess_letter)
-      remove_flower
-      # end game at 0 flowers
-    end
-
   end
 
 end
 
+
 testdisplay = Display.new
-testdisplay.print_flower
+#testdisplay.print_flower
 testdisplay.display_progress("m")
+testdisplay.remove_flower
 
 
-
-
-
-
-
-
-
+# if !@secret_word.include?(@guess_letter)
+#   remove_flower
+# end
+  # end game at 0 flowers
 
 
 
 
 class SecretWord
+  attr_accessor :secret_word
 
   def initialize
+    @secret_word = secret_word
   end
 
   def generate_secret_word
+
+    @secret_word = Faker::
     # generate random unique word
     # for testing phase, secret_word = "desks"
     @secret_word = "desks"
