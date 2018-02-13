@@ -15,15 +15,15 @@ class GamePlay
 
       picture = Display.new(word_array)
       picture.print_flower
-      print picture.display_progress
-
+      # print picture.display_progress
       guess = Guess.new(word_array)
-
+      print "Word: #{guess.progress}"
       while @play == "y"
-        print "Enter letter > "
+        print "\nEnter letter > "
         letter = gets.chomp.downcase
-
-        guess.compare(letter)
+        puts guess.compare(letter)
+        # compare word to letter
+        # display progress
       end
     end
   end
@@ -71,12 +71,12 @@ class Display
     print_flower
   end
 
-  def display_progress
-    display = Guess.new(@word_array)
-    print "Word: "
-    print display.progress_array
-    puts "\n"
-  end
+  # def display_progress
+  #   display = Guess.new(@word_array)
+  #   print "Word: "
+  #   print display
+  #   puts "\n"
+  # end
 
 end
 
@@ -85,6 +85,11 @@ class Guess
 
   def initialize(word)
     @word = word
+    progress = []
+    @word.length.times do
+      progress.push("_")
+    end
+    @progress = progress.join(" ")
   end
 
   def compare(letter)
@@ -94,37 +99,20 @@ class Guess
     if @letter.length > 1 || @letter == "quit"
       quit_game = GamePlay.new("n")
       quit_game.quit_or_play_game
-    elsif @word.include?(@guess)
-
-      @word.each do |match|
+    elsif @word.include?(@letter)
+      @word.map! do |match|
         if match == @letter
-          @word[match] = index
-
-          @progress_array
-          ### .map the @letter value within progress_array
-
-
-
-
-
+          @letter
+        else
+          "_"
+        end
+      end
+      @progress = @word
+      return @progress.join(" ")
     else
-      guesses_list.push(@guess)
-
+      #pop off a bud
     end
-
-
-  end
-
-  def progress_array
-    @progress = []
-    @word.length.times do
-      @progress.push("_")
-
-
-
-
-    end
-    return @progress.join(" ")
+    guesses_list.push(@guess)
   end
 end
 
