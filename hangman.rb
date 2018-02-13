@@ -1,7 +1,3 @@
-
-
-
-
 class GamePlay
   attr_accessor :play
 
@@ -14,11 +10,11 @@ class GamePlay
       puts "Goodbye!"
       exit
     elsif @play == "y"
-
       new_word = GenerateWord.new
       word_array = new_word.fake_word
       picture = Display.new(word_array)
       picture.print_flower
+      print picture.display_progress
 
       ## call GenerateWord class
         # withing GenerateWord call DisplayPicture
@@ -45,7 +41,7 @@ class GenerateWord
 end
 
 class Display
-  attr_accessor :flowers, :word_array
+  attr_accessor :flowers, :word_array, :progress, :display
 
   def initialize(word_array)
     @flowers = ["(@)", "(@)", "(@)", "(@)"]
@@ -70,18 +66,33 @@ class Display
     print_flower
   end
 
-  def display_progress(letter)
-    # change dashes to letter for correct guess
-    @guess_letter = letter
+  def display_progress
+    display = Guess.new(@word_array)
     print "Word: "
-    @secret_word.length.times do
-      print "_"
-    end
+    print display.progress_array
     puts "\n"
   end
 
 end
 
+class Guess
+  attr_accessor :guess, :word, :progress
+
+  def initialize(word)
+    @word = word
+  end
+
+  def compare
+    # checks user_guess against
+  end
+  def progress_array
+    @progress = []
+    @word.length.times do
+      @progress.push("_")
+    end
+    return @progress.join(" ")
+  end
+end
 
 puts "Would you like to play a game of HANGMAN?"
 print "Type Y or N: "
@@ -109,14 +120,3 @@ round1.quit_or_play_game
 
 #
 #
-# class Guess
-#
-#   def initialize(user_guess)
-#     #
-#   end
-#
-#   def check_guess
-#     # checks user_guess against
-#   end
-#
-# end
