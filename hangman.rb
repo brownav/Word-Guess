@@ -7,19 +7,24 @@ class GamePlay
 
   def quit_or_play_game
     if @play == "n"
-      puts "Goodbye!"
+      puts "\nGoodbye!"
       exit
     elsif @play == "y"
       new_word = GenerateWord.new
       word_array = new_word.fake_word
+
       picture = Display.new(word_array)
       picture.print_flower
       print picture.display_progress
 
-      ## call GenerateWord class
-        # withing GenerateWord call DisplayPicture
-        # call DisplayPicture once when generated, then call updated form in Guess
+      guess = Guess.new(word_array)
 
+      while @play == "y"
+        print "Enter letter > "
+        letter = gets.chomp.downcase
+
+        guess.compare(letter)
+      end
     end
   end
 
@@ -76,19 +81,48 @@ class Display
 end
 
 class Guess
-  attr_accessor :guess, :word, :progress
+  attr_accessor :letter, :word, :progress
 
   def initialize(word)
     @word = word
   end
 
-  def compare
-    # checks user_guess against
+  def compare(letter)
+    @letter = letter
+    guesses_list = []
+
+    if @letter.length > 1 || @letter == "quit"
+      quit_game = GamePlay.new("n")
+      quit_game.quit_or_play_game
+    elsif @word.include?(@guess)
+
+      @word.each do |match|
+        if match == @letter
+          @word[match] = index
+
+          @progress_array
+          ### .map the @letter value within progress_array
+
+
+
+
+
+    else
+      guesses_list.push(@guess)
+
+    end
+
+
   end
+
   def progress_array
     @progress = []
     @word.length.times do
       @progress.push("_")
+
+
+
+
     end
     return @progress.join(" ")
   end
