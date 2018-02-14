@@ -13,17 +13,20 @@ class GamePlay
       new_word = GenerateWord.new
       word_array = new_word.fake_word
 
-      picture = Display.new(word_array)
-      picture.print_flower
-      # print picture.display_progress
       guess = Guess.new(word_array)
-      print "Word: #{guess.progress}"
+
+      picture = Display.new(4)
+
       while @play == "y"
-        print "\nEnter letter > "
+        picture.print_flower
+
+        print "Word: #{guess.progress}\n"
+        print "Enter letter > "
         letter = gets.chomp.downcase
         puts guess.compare(letter)
-        # compare word to letter
-        # display progress
+
+
+        #print "Word: #{guess.progress}\n"
       end
     end
   end
@@ -46,18 +49,16 @@ class GenerateWord
 end
 
 class Display
-  attr_accessor :flowers, :word_array, :progress, :display
+  attr_accessor :flowers, :wrong_letters
 
-  def initialize(word_array)
-    @flowers = ["(@)", "(@)", "(@)", "(@)"]
-    @word_array = word_array
+  def initialize(wrong_letters)
+    @wrong_letters = wrong_letters
+    @flower = "(@)"
   end
 
   def print_flower
     puts "\n"
-    @flowers.each do |flower|
-      print "#{flower}"
-    end
+    @wrong_letters.times { |i| print "#{@flower}" }
     puts
     puts " \\,\\,|,/,/"
     puts "   _\\|/_   "
@@ -67,25 +68,19 @@ class Display
   end
 
   def remove_flower
-    @flowers.delete_at(-1)
+    @wrong_letters = wrong_letters - 1
     print_flower
   end
-
-  # def display_progress
-  #   display = Guess.new(@word_array)
-  #   print "Word: "
-  #   print display
-  #   puts "\n"
-  # end
 
 end
 
 class Guess
-  attr_accessor :letter, :word, :progress
+  attr_accessor :letter, :word, :progress, :wrong_letters
 
   def initialize(word)
     @word = word
     progress = []
+    @wrong_letters = []
     @word.length.times do
       progress.push("_")
     end
@@ -94,8 +89,6 @@ class Guess
 
   def compare(letter)
     @letter = letter
-    guesses_list = []
-
     if @letter.length > 1 || @letter == "quit"
       quit_game = GamePlay.new("n")
       quit_game.quit_or_play_game
@@ -110,9 +103,11 @@ class Guess
       @progress = @word
       return @progress.join(" ")
     else
-      #pop off a bud
+      wrong_guess = Display.new(4)
+      wrong_guess.remove_flower
     end
-    guesses_list.push(@guess)
+    @wrong_letters.push(@letter)
+    puts @wrong_letters
   end
 end
 
