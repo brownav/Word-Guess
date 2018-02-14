@@ -1,3 +1,4 @@
+require 'faker'
 class GamePlay
   attr_accessor :play
 
@@ -12,21 +13,15 @@ class GamePlay
     elsif @play == "y"
       new_word = GenerateWord.new
       word_array = new_word.fake_word
-
       guess = Guess.new(word_array)
-
       picture = Display.new(4)
+      picture.print_flower
 
       while @play == "y"
-        picture.print_flower
-
         print "Word: #{guess.progress}\n"
         print "Enter letter > "
         letter = gets.chomp.downcase
-        puts guess.compare(letter)
-
-
-        #print "Word: #{guess.progress}\n"
+        guess.compare(letter)
       end
     end
   end
@@ -41,7 +36,7 @@ class GenerateWord
   end
 
   def fake_word
-    @word = "desks"
+    @word = Faker::HarryPotter.character
     @word = @word.split("")
     return @word
   end
@@ -66,12 +61,6 @@ class Display
     puts "   |   |   "
     puts "   |___|   \n\n"
   end
-
-  def remove_flower
-    @wrong_letters = wrong_letters - 1
-    print_flower
-  end
-
 end
 
 class Guess
@@ -84,7 +73,7 @@ class Guess
     @word.length.times do
       progress.push("_")
     end
-    @progress = progress.join(" ")
+    @progress = progress
   end
 
   def compare(letter)
@@ -93,21 +82,26 @@ class Guess
       quit_game = GamePlay.new("n")
       quit_game.quit_or_play_game
     elsif @word.include?(@letter)
-      @word.map! do |match|
-        if match == @letter
-          @letter
-        else
-          "_"
+      @word.each_with_index do |value, index|
+        if value == @letter
+          @progress.delete_at(index)
+          @progress.insert(index, @letter)
         end
       end
-      @progress = @word
-      return @progress.join(" ")
+      return @progress
     else
-      wrong_guess = Display.new(4)
-      wrong_guess.remove_flower
+      @wrong_letters.push(@letter)
     end
-    @wrong_letters.push(@letter)
-    puts @wrong_letters
+    flowers_remaining = 4 - @wrong_letters.length
+    flower_points = Display.new(flowers_remaining)
+    if flowers_remaining >= 1
+      flower_points.print_flower
+    else
+      puts "Game over.\n"
+      @word = @word.join("")
+      puts "Secret Word: #@word"
+      exit
+    end
   end
 end
 
@@ -117,23 +111,3 @@ user_response = gets.chomp.downcase
 
 round1 = GamePlay.new(user_response)
 round1.quit_or_play_game
-
-
-#
-# testdisplay = Display.new
-# #testdisplay.print_flower
-# testdisplay.display_progress("m")
-# testdisplay.remove_flower
-#
-#
-# # if !@secret_word.include?(@guess_letter)
-# #   remove_flower
-# # end
-#   # end game at 0 flowers
-#
-#
-#
-#
-
-#
-#
