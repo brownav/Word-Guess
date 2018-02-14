@@ -116,7 +116,7 @@ end
       puts "   \\_\\__|__/_/  ".colorize(:green)
       puts "    |________|    ".colorize(:blue)
       puts "    |  Roses |    ".colorize(:blue)
-      puts "    |________|    ".colorize(:blue
+      puts "    |________|    ".colorize(:blue)
       puts
     end
   end
